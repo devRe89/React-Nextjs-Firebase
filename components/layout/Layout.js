@@ -16,6 +16,11 @@ const Layout = props => {
                         --naranja: #da552f;
                     }
 
+                    * {
+                        font-family: 'Roboto Slab', serif;
+                        font-weight: 500;
+                    }
+
                     html {
                         font-size: 62.5%;
                         box-sizing: border-box;
