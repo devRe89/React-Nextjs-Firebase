@@ -6,11 +6,11 @@ const Heading = styled.h1`
 `;
 
 
-export default function Home() {
+export default function Login() {
   return (
     <div>
         <Layout>
-          <Heading>Home</Heading>
+          <Heading>Login</Heading>
         </Layout>
     </div>
   )

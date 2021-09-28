@@ -6,11 +6,11 @@ const Heading = styled.h1`
 `;
 
 
-export default function Home() {
+export default function Buscar() {
   return (
     <div>
         <Layout>
-          <Heading>Home</Heading>
+          <Heading>Buscar</Heading>
         </Layout>
     </div>
   )
