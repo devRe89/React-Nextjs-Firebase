@@ -1,4 +1,6 @@
+import {useState} from 'react';
 import Layout from '../components/layout/Layout';
+import Router from 'next/router';
 import {css} from '@emotion/react';
 import { Formulario, Campo, InputSubmit, Error } from '../components/ui/Formulario';
 
@@ -16,6 +18,8 @@ const INIT_STATE = {
 }
 
 export default function CrearCuenta() {
+
+  const [errorfb, setErrorfb] = useState(false);
   
   const {
     valores,
@@ -29,9 +33,11 @@ export default function CrearCuenta() {
   
   async function nuevaCuenta() {
     try {
-      const nuevoUser = await firebase.registrarUsuario(nombre, email, password);
+
+      await firebase.registrarUsuario(nombre, email, password);
+      Router.push('/');
     } catch (error) {
-      console.error(error);
+      setErrorfb(error.message);
     }
   }  
 
@@ -92,6 +98,8 @@ export default function CrearCuenta() {
             </Campo>
 
             {errors.password && <Error>{errors.password}</Error>}
+
+            {errorfb && <Error>{errorfb}</Error>}
 
             <InputSubmit 
               type="submit" 

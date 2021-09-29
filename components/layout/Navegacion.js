@@ -16,7 +16,7 @@ const Nav = styled.nav`
 `;
 
 
-const Navegacion = () => {
+const Navegacion = ({usuario}) => {
     return ( 
         <Nav>
             <Link href="/">
@@ -25,9 +25,13 @@ const Navegacion = () => {
             <Link href="/populares">
                 <a>Populares</a>
             </Link>
-            <Link href="/nuevo-producto">
-                <a>Nuevo Producto</a>
-            </Link>
+            {usuario ?
+                (
+                    <Link href="/nuevo-producto">
+                        <a>Nuevo Producto</a>
+                    </Link>
+                )
+            : null}
         </Nav>
     );
 }
