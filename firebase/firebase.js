@@ -8,11 +8,12 @@ class Firebase {
     constructor() {
         this.app = initializeApp(firebaseConfig);
         this.auth = getAuth();
-        this.current = this.auth.currentUser;
     }    
     async registrarUsuario(nombre, email, password){
         const nuevoUsuario = await createUserWithEmailAndPassword(this.auth, email, password);
-        return await nuevoUsuario.user.updateProfile({
+        const current = this.auth.currentUser;
+        console.log(current);
+        return await nuevoUsuario.auth().updateProfile({
             displayName: nombre
         });
 
