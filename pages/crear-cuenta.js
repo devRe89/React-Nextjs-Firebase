@@ -7,6 +7,8 @@ import { Formulario, Campo, InputSubmit, Error } from '../components/ui/Formular
 import useValidation from '../hooks/useValidation';
 import validationsCrearCuenta from '../validations/validationsCrearCuenta';
 
+//Firebase
+import firebase from '../firebase';
 const INIT_STATE = {
   nombre: '',
   email: '',
@@ -15,10 +17,6 @@ const INIT_STATE = {
 
 export default function CrearCuenta() {
   
-  const nuevaCuenta = () => {
-    console.log('Creando cuenta...');
-  }  
-
   const {
     valores,
     errors,
@@ -26,9 +24,16 @@ export default function CrearCuenta() {
     handleChange,
     handleBlur
   } = useValidation(INIT_STATE, validationsCrearCuenta, nuevaCuenta);
-
+  
   const { nombre, email, password } = valores;
-
+  
+  async function nuevaCuenta() {
+    try {
+      const nuevoUser = await firebase.registrarUsuario(nombre, email, password);
+    } catch (error) {
+      console.error(error);
+    }
+  }  
 
   return (
     <div>
