@@ -15,7 +15,7 @@ import firebase from '../firebase';
 const INIT_STATE = {
   nombre: '',
   empresa: '',
-  imagen: '',
+  // imagen: '',
   url: '',
   descripcion: ''
 }
@@ -34,8 +34,24 @@ export default function NuevoProducto() {
 
   const {nombre, empresa, imagen, url, descripcion} = valores;
 
-  function nuevoProducto(){
-    console.log('creando producto...');
+  async function nuevoProducto(){
+    try {
+
+      const producto = {
+        nombre,
+        empresa,
+        url,
+        descripcion,
+        votos: 0,
+        comentarios: [],
+        creado: Date.now()
+      }
+
+      await firebase.crearProducto(producto);
+
+    } catch (error) {
+      setErrorfb(error.message);
+    }
   }
 
   return (
@@ -98,7 +114,7 @@ export default function NuevoProducto() {
 
               {errors.url && <Error>{errors.url}</Error>}
 
-              <Campo>
+              {/* <Campo>
                 <label htmlFor="imagen">Imagen</label>
                 <input 
                   type="file"
@@ -111,7 +127,7 @@ export default function NuevoProducto() {
                 />
               </Campo>
 
-              {errors.imagen && <Error>{errors.imagen}</Error>}
+              {errors.imagen && <Error>{errors.imagen}</Error>} */}
 
             </fieldset>
 

@@ -1,20 +1,20 @@
 import { initializeApp } from "firebase/app";
+import firebaseConfig from './config';
 import { 
     getAuth, 
     createUserWithEmailAndPassword, 
     updateProfile, 
     signInWithEmailAndPassword, 
     signOut } from 'firebase/auth';
-
-
-import firebaseConfig from './config';
+import { getFirestore, collection, addDoc } from "firebase/firestore";
 
 class Firebase {
     
     constructor() {
         this.app = initializeApp(firebaseConfig);
         this.auth = getAuth();
-        this.user = 'h';
+        this.db = getFirestore();
+        // this.storage = this.app.storage();
     }    
 
     async registrarUsuario(nombre, email, password){
@@ -33,6 +33,10 @@ class Firebase {
 
     async cerrarSesion() {
         return await signOut(this.auth);
+    }
+
+    async crearProducto(producto) {
+        return await addDoc(collection(this.db, "productos"), producto);
     }
     
 }
