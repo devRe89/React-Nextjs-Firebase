@@ -7,7 +7,7 @@ import {
     updateProfile, 
     signInWithEmailAndPassword, 
     signOut } from 'firebase/auth';
-import { getFirestore, collection, addDoc } from "firebase/firestore";
+import { getFirestore, collection, addDoc, query, where, getDocs, orderBy } from "firebase/firestore";
 
 class Firebase {
     
@@ -18,7 +18,7 @@ class Firebase {
         this.storage = getStorage();
     }    
 
-    async registrarUsuario(nombre, email, password){
+    async registrarUsuario(nombre, email, password) {
 
         const nuevoUsuario = await createUserWithEmailAndPassword(this.auth, email, password);
         await updateProfile(this.auth.currentUser, {
@@ -47,6 +47,19 @@ class Firebase {
         const urlImage = await this.upImageProducto(producto.Urlimagen);
         producto.Urlimagen = urlImage;
         return await addDoc(collection(this.db, "productos"), producto);
+    }
+
+    async getAllProducts() {
+        const q = query(collection(this.db, 'productos'), orderBy('creado', 'desc'));
+        const querySnapshot = await getDocs(q);
+        const resq = [];
+        querySnapshot.forEach((doc) => {
+            resq.push({
+                id: doc.id,
+                ...doc.data(),
+            });
+        });
+        return resq;
     }
     
 }
