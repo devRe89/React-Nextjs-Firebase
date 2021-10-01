@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import firebaseConfig from './config';
 import { 
     getAuth, 
@@ -14,7 +15,7 @@ class Firebase {
         this.app = initializeApp(firebaseConfig);
         this.auth = getAuth();
         this.db = getFirestore();
-        // this.storage = this.app.storage();
+        this.storage = getStorage();
     }    
 
     async registrarUsuario(nombre, email, password){
@@ -35,7 +36,16 @@ class Firebase {
         return await signOut(this.auth);
     }
 
+    async upImageProducto(file) {
+        const storageRef = ref(this.storage, `imgsProductos/${file.name}`);
+        await uploadBytes(storageRef, file);
+        const urlImage = await getDownloadURL(storageRef);
+        return urlImage;
+    }
+
     async crearProducto(producto) {
+        const urlImage = await this.upImageProducto(producto.Urlimagen);
+        producto.Urlimagen = urlImage;
         return await addDoc(collection(this.db, "productos"), producto);
     }
     

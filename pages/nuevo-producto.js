@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import Layout from '../components/layout/Layout';
-import Router from 'next/router';
+import Router, {useRouter} from 'next/router';
 import {css} from '@emotion/react';
 import { Formulario, Campo, InputSubmit, Error } from '../components/ui/Formulario';
 
@@ -23,16 +23,21 @@ const INIT_STATE = {
 export default function NuevoProducto() {
 
   const [errorfb, setErrorfb] = useState(false);
+  const [image, getImage] = useState(null);
+  const router = useRouter();
   
   const {
     valores,
     errors,
     handleSubmit,
     handleChange,
-    handleBlur
+    handleBlur,
   } = useValidation(INIT_STATE, validationsCrearProducto, nuevoProducto);
+  const {nombre, empresa, url, descripcion} = valores;
 
-  const {nombre, empresa, imagen, url, descripcion} = valores;
+  const handleChangeFile = e => {
+    getImage(e.target.files[0]);
+  }
 
   async function nuevoProducto(){
     try {
@@ -41,6 +46,7 @@ export default function NuevoProducto() {
         nombre,
         empresa,
         url,
+        Urlimagen: image,
         descripcion,
         votos: 0,
         comentarios: [],
@@ -48,6 +54,8 @@ export default function NuevoProducto() {
       }
 
       await firebase.crearProducto(producto);
+
+      return router.push('/');
 
     } catch (error) {
       setErrorfb(error.message);
@@ -114,20 +122,16 @@ export default function NuevoProducto() {
 
               {errors.url && <Error>{errors.url}</Error>}
 
-              {/* <Campo>
+              <Campo>
                 <label htmlFor="imagen">Imagen</label>
                 <input 
                   type="file"
                   id="imagen"
                   placeholder="imagen"
                   name="imagen"
-                  value={imagen}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
+                  onChange={handleChangeFile}
                 />
               </Campo>
-
-              {errors.imagen && <Error>{errors.imagen}</Error>} */}
 
             </fieldset>
 
