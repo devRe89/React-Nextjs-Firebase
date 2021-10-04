@@ -59,6 +59,7 @@ export default function NuevoProducto() {
         url,
         Urlimagen: image,
         descripcion,
+        haVotado: [],
         votos: 0,
         comentarios: [],
         creado: Date.now(),
