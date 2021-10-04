@@ -7,7 +7,7 @@ import {
     updateProfile, 
     signInWithEmailAndPassword, 
     signOut } from 'firebase/auth';
-import { getFirestore, collection, addDoc, query, where, getDocs, orderBy } from "firebase/firestore";
+import { getFirestore, collection, addDoc, query, where, getDocs, orderBy, getDoc, doc } from "firebase/firestore";
 
 class Firebase {
     
@@ -60,6 +60,12 @@ class Firebase {
             });
         });
         return resq;
+    }
+
+    async getProductById(id){
+        const docRef = doc(this.db, 'productos', id);
+        const product = await getDoc(docRef);
+        return product;
     }
     
 }
