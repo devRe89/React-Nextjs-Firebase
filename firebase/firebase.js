@@ -19,12 +19,10 @@ class Firebase {
     }    
 
     async registrarUsuario(nombre, email, password) {
-
         const nuevoUsuario = await createUserWithEmailAndPassword(this.auth, email, password);
         await updateProfile(this.auth.currentUser, {
             displayName: nombre
         });
-
         return nuevoUsuario;
     }
 
@@ -61,9 +59,6 @@ class Firebase {
         });
         return resq;
     }
-    
 }
-
 const firebase = new Firebase();
-
 export default firebase;
