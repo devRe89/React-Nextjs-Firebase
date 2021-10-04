@@ -7,7 +7,7 @@ import {
     updateProfile, 
     signInWithEmailAndPassword, 
     signOut } from 'firebase/auth';
-import { getFirestore, collection, addDoc, query, where, getDocs, orderBy } from "firebase/firestore";
+import { getFirestore, collection, addDoc, query, where, getDocs, orderBy, getDoc, doc, setDoc } from "firebase/firestore";
 
 class Firebase {
     
@@ -59,6 +59,41 @@ class Firebase {
         });
         return resq;
     }
+<<<<<<< HEAD
+=======
+
+    async getProductById(id) {
+        const docRef = doc(this.db, 'productos', id);
+        const product = await getDoc(docRef);
+        return product;
+    }
+
+    async upVotosProduct(uid, producto, id) {
+        const {haVotado, votos} = producto;
+
+        if(haVotado.includes(uid)) {
+            return null;
+        }    
+
+        const hanVotado = [...haVotado, uid];        
+        const docRef = doc(this.db, 'productos', id);
+        const nuevoTotal = votos + 1;
+        await setDoc( docRef, {votos: nuevoTotal, haVotado: hanVotado}, {merge: true} );
+
+        return nuevoTotal;
+    }
+
+    async upComentariosProduct(id, comentario, producto) {
+        const {comentarios} = producto;
+
+        const inComentarios = [...comentarios, comentario];
+        const docRef = doc(this.db, 'productos', id);
+        await setDoc( docRef, {comentarios: inComentarios}, {merge: true} );
+
+        return comentario;
+    }
+    
+>>>>>>> dc16593e3b302cad4ff8a8810211bcb744f844ab
 }
 const firebase = new Firebase();
 export default firebase;

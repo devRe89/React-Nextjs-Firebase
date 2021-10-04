@@ -1,8 +1,9 @@
-import {useState} from 'react';
+import {useState, useContext, useEffect} from 'react';
 import Layout from '../components/layout/Layout';
 import Router, {useRouter} from 'next/router';
 import {css} from '@emotion/react';
 import { Formulario, Campo, InputSubmit, Error } from '../components/ui/Formulario';
+import {FirebaseContext} from '../firebase';
 
 
 //Validaciones
@@ -11,6 +12,7 @@ import validationsCrearProducto from '../validations/validationsCrearProducto';
 
 //Firebase
 import firebase from '../firebase';
+
 
 const INIT_STATE = {
   nombre: '',
@@ -21,11 +23,20 @@ const INIT_STATE = {
 }
 
 export default function NuevoProducto() {
-
+  
   const [errorfb, setErrorfb] = useState(false);
   const [image, getImage] = useState(null);
   const router = useRouter();
   
+  //autenticado
+  const {usuario} = useContext(FirebaseContext);
+
+  useEffect(() => {
+    if(!usuario){
+      router.push('/login');
+    }
+  }, [usuario])
+
   const {
     valores,
     errors,
@@ -34,34 +45,41 @@ export default function NuevoProducto() {
     handleBlur,
   } = useValidation(INIT_STATE, validationsCrearProducto, nuevoProducto);
   const {nombre, empresa, url, descripcion} = valores;
-
+  
   const handleChangeFile = e => {
     getImage(e.target.files[0]);
   }
-
+  
   async function nuevoProducto(){
     try {
-
+      
       const producto = {
         nombre,
         empresa,
         url,
         Urlimagen: image,
         descripcion,
+        haVotado: [],
         votos: 0,
         comentarios: [],
-        creado: Date.now()
+        creado: Date.now(),
+        creador: {
+          id: usuario.uid,
+          nombre: usuario.displayName
+        }
       }
-
+      
       await firebase.crearProducto(producto);
-
+      
       return router.push('/');
-
+      
     } catch (error) {
       setErrorfb(error.message);
     }
   }
 
+
+  
   return (
     <div>
         <Layout>
