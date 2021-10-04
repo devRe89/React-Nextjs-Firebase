@@ -59,8 +59,7 @@ class Firebase {
         });
         return resq;
     }
-<<<<<<< HEAD
-=======
+
 
     async getProductById(id) {
         const docRef = doc(this.db, 'productos', id);
@@ -93,7 +92,6 @@ class Firebase {
         return comentario;
     }
     
->>>>>>> dc16593e3b302cad4ff8a8810211bcb744f844ab
 }
 const firebase = new Firebase();
 export default firebase;
