@@ -60,7 +60,6 @@ class Firebase {
         return resq;
     }
 
-
     async getProductById(id) {
         const docRef = doc(this.db, 'productos', id);
         const product = await getDoc(docRef);
@@ -93,5 +92,7 @@ class Firebase {
     }
     
 }
+
 const firebase = new Firebase();
+
 export default firebase;
